@@ -4,6 +4,8 @@ import MainContainer from "./styles/MainContainer.styles";
 import SubContainer1 from "./styles/SubContainer1.Styles";
 import SubContainer2 from "./styles/SubContainer2.Styles";
 import NavigationBar from "./styles/NavigationBar.styles";
+import NavButton from "./styles/NavButton.Styles";
+import MuiIcon from "./components/MuiIcon";
 
 function App() {
   return (
@@ -14,9 +16,15 @@ function App() {
         <SubContainer2></SubContainer2>
       </MainContainer>
       <NavigationBar>
-        {/* <div style={{ width: "100%", height: "50px" }}></div>
-        <div style={{ width: "100%", height: "50px" }}></div>
-        <div style={{ width: "100%", height: "50px" }}></div> */}
+        <NavButton>
+          <MuiIcon type="home" size="large" color="gray" />
+        </NavButton>
+        <NavButton>
+          <MuiIcon type="people" size="large" color="gray" />
+        </NavButton>
+        <NavButton>
+          <MuiIcon type="review" size="large" color="gray" />
+        </NavButton>
       </NavigationBar>
     </>
   );
