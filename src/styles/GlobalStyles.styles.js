@@ -27,7 +27,7 @@ const GlobalStyles = createGlobalStyle`
         height: 100vh;
     }
     body {
-        font-family: 'Noto Sans KR', sans-serif;
+        font-family: 'nanumfont';
     }
     #root {
         display: flex;

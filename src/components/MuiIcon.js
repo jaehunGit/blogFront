@@ -1,17 +1,20 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveIcon } from "../actions/Actions";
-import { IconContainer } from "../styles/IconContainer.styles";
+import { useNavigate } from "react-router-dom";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined";
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
+import { IconContainer } from "../styles/IconContainer.styles";
 
 const MuiIcon = ({ type, size = "large", color = "gray" }) => {
   const dispatch = useDispatch();
   const activeIcon = useSelector((state) => state.activeIcon);
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    dispatch(setActiveIcon(type === activeIcon ? null : type)); // 클릭한 아이콘이 이미 활성 상태인 경우, 다시 클릭하면 비활성 상태로 변경
+    dispatch(setActiveIcon(type));
+    navigate(`/${type}`);
   };
 
   let IconComponent = null;
@@ -32,12 +35,12 @@ const MuiIcon = ({ type, size = "large", color = "gray" }) => {
 
   return (
     <IconContainer
-      size={size}
-      type={type}
-      color={activeIcon === type ? "#12B886" : color}
       onClick={handleClick}
+      size={size}
+      color={activeIcon === type ? "green" : "gray"}
+      $isActive={activeIcon === type}
     >
-      {IconComponent && <IconComponent />}
+      {IconComponent && <IconComponent fontSize={size} />}
     </IconContainer>
   );
 };
