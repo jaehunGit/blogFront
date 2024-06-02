@@ -1,7 +1,7 @@
 import { SET_ACTIVE_ICON } from "../actions/Actions";
 
 const initialState = {
-  activeIcon: null,
+  activeIcon: "home",
 };
 
 // 리듀서 함수 정의

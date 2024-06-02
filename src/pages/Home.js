@@ -38,7 +38,7 @@ const Home = () => {
   }, [count, line]);
   return (
     <>
-      <MainContent>
+      <MainContent $center $marginLeft>
         <FirstText type="false">HI! HOW ARE YOU?</FirstText>
         <DeveloperTextContainer>
           <FixedText>I'M </FixedText>

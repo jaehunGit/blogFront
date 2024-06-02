@@ -7,7 +7,7 @@ import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
 import { IconContainer } from "../styles/IconContainer.styles";
 
-const MuiIcon = ({ type, size = "large", color = "gray" }) => {
+const MuiIconComponent = ({ type, size = "large", color = "gray" }) => {
   const dispatch = useDispatch();
   const activeIcon = useSelector((state) => state.activeIcon);
   const navigate = useNavigate();
@@ -37,7 +37,6 @@ const MuiIcon = ({ type, size = "large", color = "gray" }) => {
     <IconContainer
       onClick={handleClick}
       size={size}
-      color={activeIcon === type ? "green" : "gray"}
       $isActive={activeIcon === type}
     >
       {IconComponent && <IconComponent fontSize={size} />}
@@ -45,4 +44,4 @@ const MuiIcon = ({ type, size = "large", color = "gray" }) => {
   );
 };
 
-export default MuiIcon;
+export default MuiIconComponent;
