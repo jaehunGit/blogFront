@@ -66,7 +66,7 @@ export const FooterText = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 11px;
-  color: white;
+  color: ${({ color }) => color};
 `;
 
 export default SubContainer1;

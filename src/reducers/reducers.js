@@ -1,12 +1,25 @@
-import { SET_ACTIVE_ICON } from "../actions/Actions";
+import { LOGIN, LOGOUT, SET_ACTIVE_ICON } from "../actions/Actions";
 
 const initialState = {
+  isAuthenticated: false,
+  user: null,
   activeIcon: "home",
 };
 
-// 리듀서 함수 정의
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOGIN:
+      return {
+        ...state,
+        isAuthenticated: true,
+        user: action.payload,
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        isAuthenticated: false,
+        user: null,
+      };
     case SET_ACTIVE_ICON:
       return {
         ...state,

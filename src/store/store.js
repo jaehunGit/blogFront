@@ -31,7 +31,7 @@ const persistedState = loadState();
 // 스토어 생성 시 로컬 스토리지에서 로드한 상태를 초기 상태로 사용
 const store = createStore(
   rootReducer,
-  persistedState || { activeIcon: "home" } // 기본 상태를 설정하고 로드된 상태를 병합
+  persistedState || undefined // 기본 상태를 설정하고 로드된 상태를 병합
 );
 
 // 상태가 변경될 때마다 로컬 스토리지에 상태 저장
