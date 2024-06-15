@@ -50,3 +50,46 @@ export const CustomTabPanel = styled.div`
   justify-content: center;
   gap: 20px;
 `;
+
+export const dialogStyles = {
+  position: "fixed",
+  bottom: 16,
+  right: 16,
+  m: 0,
+  "& .MuiDialog-paper": {
+    margin: 0,
+    width: "600px",
+    maxHeight: "100vh",
+  },
+};
+
+export const textFieldStyles = {
+  fontSize: "18px",
+};
+
+export const attachFileIconStyles = {
+  fontSize: "28px",
+  cursor: "pointer",
+  marginRight: "auto",
+};
+
+export const userInfoStyles = {
+  display: "flex",
+  alignItems: "center",
+  marginRight: "30px",
+  fontWeight: "bold",
+  fontSize: "20px",
+};
+
+export const buttonStyles = {
+  color: "black",
+  fontWeight: "bold",
+  fontSize: "20px",
+};
+
+export const loginButtonStyles = {
+  marginRight: "30px",
+  color: "black",
+  fontWeight: "bold",
+  fontSize: "20px",
+};

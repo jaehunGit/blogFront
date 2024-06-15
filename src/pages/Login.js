@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../actions/Actions";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   LoginContainer,
   LogoImage,
@@ -10,10 +14,8 @@ import {
   FooterTextStyled,
   ErrorMessage,
 } from "../styles/LoginStyles.styles.js";
-import { useDispatch } from "react-redux";
-import { login } from "../actions/Actions";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
+import testimage from "../assets/images/loginLogo.png";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -30,30 +32,38 @@ const Login = () => {
   };
 
   const handleLogin = () => {
-    console.log(12313);
     axios
       .post("/api/Login", credentials)
       .then((res) => {
-        const { nickName, userEmail } = res.data; // 서버에서 받은 데이터 구조에 맞게 수정
-        dispatch(login({ nickName, userEmail }));
+        dispatch(login(res.data));
         setErrorMessage("");
         navigate("/home");
       })
       .catch((err) => {
-        console.log(err.response.data.errorMessage);
         setErrorMessage(err.response.data.errorMessage);
       });
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+
   return (
     <LoginContainer>
-      <LogoImage src="/images/blogLogo.png" alt="Logo" />
+      <LogoImage
+        src={testimage}
+        alt="Logo"
+        style={{ width: "200px", height: "100px" }}
+      />
       <StyledInput
         type="text"
         name="userId"
         placeholder="아이디"
         value={credentials.userId}
         onChange={handleChange}
+        onKeyPress={handleKeyPress}
       />
       <PasswordInput
         type="password"
@@ -61,7 +71,9 @@ const Login = () => {
         placeholder="비밀번호"
         value={credentials.password}
         onChange={handleChange}
+        onKeyPress={handleKeyPress}
       />
+
       <div style={{ height: "20px", marginBottom: "10px" }}>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </div>
@@ -69,7 +81,7 @@ const Login = () => {
       <LinksContainer>
         <LinkText>아이디 찾기</LinkText>
         <LinkText>비밀번호 찾기</LinkText>
-        <LinkText onClick={() => navigate("/signup")}>회원가입</LinkText>
+        <LinkText>회원가입</LinkText>
       </LinksContainer>
       <FooterTextStyled>@2024 all rights reserved</FooterTextStyled>
     </LoginContainer>

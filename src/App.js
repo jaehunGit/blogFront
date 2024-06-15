@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Route,
@@ -13,7 +13,12 @@ import People from "./pages/People";
 import Review from "./pages/Review";
 import Signup from "./pages/Signup";
 import GlobalStyles from "./styles/GlobalStyles.styles";
-import MainContainer from "./styles/MainContainer.styles";
+import {
+  AppContainer,
+  Logo,
+  UserContainer,
+} from "./styles/AppStyles.styles.js";
+import { MainContainer } from "./styles/MainStyles.js";
 import {
   SubContainer1,
   ImageContainer,
@@ -29,7 +34,15 @@ import SubContainer2 from "./styles/SubContainer2.Styles";
 import NavigationBar from "./styles/NavigationBar.styles";
 import NavButton from "./styles/NavButton.Styles";
 import MuiIcon from "./components/MuiIconComponent.js";
-import { ButtonStyles } from "./styles/MuiCustomStyles.Styles.js";
+import {
+  ButtonStyles,
+  dialogStyles,
+  textFieldStyles,
+  attachFileIconStyles,
+  userInfoStyles,
+  buttonStyles,
+  loginButtonStyles,
+} from "./styles/MuiCustomStyles.Styles.js";
 import EmailIcon from "@mui/icons-material/Email";
 import { Button } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
@@ -41,9 +54,16 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Tooltip from "@mui/material/Tooltip";
 
 import Login from "./pages/Login.js";
+import emailjs from "emailjs-com";
+import { SERVICE_ID, TEMPLATE_ID, USER_ID } from "./email.js";
 
 function App() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    from_name: "",
+    to_name: "",
+    message: "",
+  });
   const dispatch = useDispatch();
   const activeIcon = useSelector((state) => state.activeIcon);
   const isAuthenticated = useSelector((state) => state.isAuthenticated);
@@ -56,14 +76,58 @@ function App() {
     if (activeIcon !== path) {
       dispatch(setActiveIcon(path || "home"));
     }
-  }, [dispatch, location.pathname, activeIcon]);
+
+    if (isAuthenticated) {
+      setFormData((prevData) => ({
+        ...prevData,
+        from_name: user.email,
+      }));
+    }
+  }, [dispatch, location.pathname, activeIcon, isAuthenticated, user]);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    if (isAuthenticated) {
+      setOpen(true);
+    } else {
+      alert("로그인이 필요한 기능입니다.");
+      navigate("/login");
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmitMail = (e) => {
+    e.preventDefault();
+    emailjs
+      .send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          from_name: user.nickName,
+          user_email: formData.from_name,
+          message: formData.message,
+        },
+        USER_ID
+      )
+      .then((response) => {
+        console.log("SUCCESS!", response.status, response.text);
+        alert("메일이 성공적으로 전송되었습니다.");
+        setOpen(false);
+      })
+      .catch((err) => {
+        console.error("FAILED...", err);
+        alert("메일 전송에 실패했습니다.");
+      });
   };
 
   const handleSignupClick = () => {
@@ -85,50 +149,14 @@ function App() {
   return (
     <>
       <GlobalStyles />
-      <div
-        style={{
-          width: "100%",
-          height: "90px",
-          position: "absolute",
-          display: "flex",
-          backgroundColor: "white",
-          boxShadow: "0px 0px 3px black",
-          justifyContent: "space-between",
-        }}
-      >
-        <img
-          src="/images/blogLogo.png"
-          alt="logo"
-          onClick={test}
-          style={{
-            width: "60px",
-            height: "60px",
-            marginTop: "12px",
-            marginLeft: "30px",
-            cursor: "pointer",
-          }}
-        />
-        <div
-          style={{
-            display: "flex",
-            marginRight: "20px",
-          }}
-        >
+      <AppContainer>
+        <Logo src="/images/blogLogo.png" alt="logo" onClick={test} />
+        <UserContainer>
           {isAuthenticated ? (
             <>
-              <span
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginRight: "30px",
-                  fontWeight: "bold",
-                  fontSize: "20px",
-                }}
-              >
-                {user.nickName}님
-              </span>
+              <span style={userInfoStyles}>{user.nickName}님</span>
               <Button
-                sx={{ color: "black", fontWeight: "bold", fontSize: "20px" }}
+                sx={buttonStyles}
                 variant="text"
                 onClick={handleLogoutClick}
               >
@@ -138,19 +166,14 @@ function App() {
           ) : (
             <>
               <Button
-                style={{ marginRight: "30px" }}
-                sx={{
-                  color: "black",
-                  fontWeight: "bold",
-                  fontSize: "20px",
-                }}
+                sx={loginButtonStyles}
                 variant="text"
                 onClick={handleLoginClick}
               >
                 로그인
               </Button>
               <Button
-                sx={{ color: "black", fontWeight: "bold", fontSize: "20px" }}
+                sx={buttonStyles}
                 variant="text"
                 onClick={handleSignupClick}
               >
@@ -158,8 +181,8 @@ function App() {
               </Button>
             </>
           )}
-        </div>
-      </div>
+        </UserContainer>
+      </AppContainer>
       <MainContainer>
         <SubContainer1>
           <ImageContainer>
@@ -207,65 +230,55 @@ function App() {
           <MuiIcon type="review" size="large" color="gray" />
         </NavButton>
       </NavigationBar>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        sx={{
-          position: "fixed",
-          bottom: 16,
-          right: 16,
-          m: 0,
-          "& .MuiDialog-paper": {
-            margin: 0,
-            width: "600px",
-            maxHeight: "100vh",
-          },
-        }}
-      >
-        <DialogTitle>새 메일</DialogTitle>
-        <DialogContent>
-          <TextField
-            margin="dense"
-            id="name"
-            label="받는 사람"
-            type="email"
-            fullWidth
-            variant="standard"
-            defaultValue="ghty6323@gmail.com"
-            InputProps={{
-              readOnly: true,
-              sx: { fontSize: "18px" },
-            }}
-          />
-          <TextField
-            margin="dense"
-            id="message"
-            type="text"
-            fullWidth
-            variant="standard"
-            multiline
-            rows={10}
-            placeholder={"내용"}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Tooltip
-            title={<span style={{ fontSize: "15px" }}>파일 첨부</span>}
-            placement="top"
-            arrow
-          >
-            <AttachFileIcon
-              sx={{ fontSize: "28px", cursor: "pointer", marginRight: "auto" }}
+      <Dialog open={open} onClose={handleClose} sx={dialogStyles}>
+        <DialogTitle>Contact Me!</DialogTitle>
+        <form onSubmit={handleSubmitMail}>
+          <DialogContent>
+            <TextField
+              margin="dense"
+              id="from_name"
+              name="from_name"
+              label="보내는 사람"
+              type="text"
+              fullWidth
+              variant="standard"
+              InputProps={{ sx: textFieldStyles }}
+              onChange={handleChange}
+              value={formData.from_name}
+              required
             />
-          </Tooltip>
-
-          <Button onClick={handleClose} color="primary">
-            취소
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            보내기
-          </Button>
-        </DialogActions>
+            <TextField
+              margin="dense"
+              id="message"
+              name="message"
+              label="내용"
+              type="text"
+              fullWidth
+              variant="standard"
+              multiline
+              rows={10}
+              placeholder="내용"
+              onChange={handleChange}
+              value={formData.message}
+              required
+            />
+          </DialogContent>
+          <DialogActions>
+            <Tooltip
+              title={<span style={{ fontSize: "15px" }}>파일 첨부</span>}
+              placement="bottom"
+              arrow
+            >
+              <AttachFileIcon sx={attachFileIconStyles} />
+            </Tooltip>
+            <Button onClick={handleClose} color="primary">
+              취소
+            </Button>
+            <Button type="submit" color="primary">
+              보내기
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </>
   );

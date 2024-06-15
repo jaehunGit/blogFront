@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import MainContent from "../styles/MainContent.styles";
+import { MainContent } from "../styles/MainStyles.js";
 import {
   PeopleContainer,
   BackgroundText,
   ForegroundText,
-  HighlightedText,
   CenteredDiv,
   Outline,
   OutlineSpan,
+  HighlightedText,
 } from "../styles/PeopelStyles.styles";
 import {
   TabStyles,
@@ -55,7 +55,6 @@ const People = () => {
                 <Tab label="FrontEnd" value="1" sx={TabStyles} />
                 <Tab label="BackEnd" value="2" sx={TabStyles} />
                 <Tab label="Tools" value="3" sx={TabStyles} />
-                <Tab label="Project" value="4" sx={TabStyles} />
               </TabList>
             </Box>
             <CustomTabPanel active={value === "1"}>

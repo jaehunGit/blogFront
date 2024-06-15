@@ -12,7 +12,11 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload,
+        user: {
+          id: action.payload.id,
+          nickName: action.payload.nickName,
+          email: action.payload.userEmail,
+        },
       };
     case LOGOUT:
       return {

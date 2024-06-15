@@ -1,6 +1,5 @@
 import React from "react";
-import MainContent from "../styles/MainContent.styles";
-import axios from "axios";
+import { MainContent } from "../styles/MainStyles.js";
 import {
   FirstText,
   DeveloperTextContainer,

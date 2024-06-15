@@ -1,7 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 
-const GlobalStyles = createGlobalStyle` 
+const GlobalStyles = createGlobalStyle`
     :root {
         --primary-color: #7a22d6;
         --font-reqular: 1rem;
@@ -43,7 +43,7 @@ const GlobalStyles = createGlobalStyle`
     li {
         padding: 0;
     }
-    b { 
+    b {
         margin-right: 3px;
     }
 `;
