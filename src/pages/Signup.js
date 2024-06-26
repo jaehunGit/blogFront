@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { FormTitle } from "../styles/CommonStyles";
 import {
   PageContainer,
   SignupForm,
   StyledInput,
   StyledLabel,
-  FormTitle,
   ButtonContainer,
   ErrorMessage,
   SuccessMessage,
@@ -39,6 +40,7 @@ const Signup = () => {
   const [isUserIdChecked, setIsUserIdChecked] = useState(false);
 
   const navigate = useNavigate(); // useNavigate 훅 추가
+  const isAuthenticated = useSelector((state) => state.isAuthenticated);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,10 +71,6 @@ const Signup = () => {
           value
         );
       setPasswordValid(isValid);
-    }
-
-    if (name === "passwordCheck") {
-      setPasswordMatch(value === formData.password);
     }
   };
 
@@ -137,15 +135,31 @@ const Signup = () => {
 
   const handleSendVerificationCode = (e) => {
     e.preventDefault();
-    setVerifiText("인증번호 재전송");
-    setShowVerificationInput(true);
-    setTimeLeft(300);
-    setFormData({ ...formData, verificationCode: "" });
-    alert("인증번호가 전송되었습니다.");
+    if (!emailValid) {
+      alert("이메일 형식이 올바르지 않습니다.");
+      return;
+    }
+
     axios
-      .post("/api/sendEmail", { email: formData.email })
-      .then((res) => {})
-      .catch((err) => console.log(err));
+      .get("/api/checkEmail", { params: { email: formData.email } })
+      .then((res) => {
+        if (res.data.isEmailAvailable) {
+          setVerifiText("인증번호 재전송");
+          setShowVerificationInput(true);
+          setTimeLeft(300);
+          setFormData({ ...formData, verificationCode: "" });
+          alert("인증번호가 전송되었습니다.");
+          axios
+            .post("/api/sendEmail", { email: formData.email })
+            .then((res) => {})
+            .catch((err) => console.log(err));
+        } else {
+          alert("이미 사용중인 이메일입니다.");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleVerifyCode = (e) => {
@@ -167,6 +181,16 @@ const Signup = () => {
         setIsEmailVerified(false);
       });
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/home");
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    setPasswordMatch(formData.password === formData.passwordCheck);
+  }, [formData]);
 
   useEffect(() => {
     if (showVerificationInput && timeLeft > 0) {
@@ -363,6 +387,7 @@ const Signup = () => {
                 backgroundColor: "rgba(255, 255, 255, 0.1)",
               },
             }}
+            onClick={() => navigate("/login")} // 취소 버튼을 클릭하면 로그인 페이지로 이동
           >
             취소
           </Button>

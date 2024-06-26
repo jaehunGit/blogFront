@@ -54,8 +54,10 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Tooltip from "@mui/material/Tooltip";
 
 import Login from "./pages/Login.js";
+import FindAccount from "./pages/FindAccount.js";
 import emailjs from "emailjs-com";
 import { SERVICE_ID, TEMPLATE_ID, USER_ID } from "./email.js";
+import ChangePassword from "./pages/ChangePassword.js";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -216,6 +218,8 @@ function App() {
             <Route path="/review" element={<Review />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/FindAccount" element={<FindAccount />} />
+            <Route path="/changePassword" element={<ChangePassword />} />
           </Routes>
         </SubContainer2>
       </MainContainer>

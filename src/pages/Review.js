@@ -1,106 +1,26 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button } from "@mui/material";
-import styled from "styled-components";
-import { Rnd } from "react-rnd";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Rnd } from "react-rnd";
+import axios from "axios";
+import {
+  CenterContainer,
+  StyledImage,
+  FormContainer,
+  TextArea,
+  CloseButton,
+  RotateButton,
+  MoveButton,
+  ActionButtonsContainer,
+  SaveButton,
+  CancelButton,
+  Tooltip,
+} from "../styles/CommonStyles";
+import { Button } from "@mui/material";
 import test1 from "../assets/images/mokokoBackGround.png";
 import CloseIcon from "@mui/icons-material/Close";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 import OpenWithIcon from "@mui/icons-material/OpenWith";
-import axios from "axios";
-
-const ImageContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  border-radius: 30px;
-  position: relative;
-  overflow: hidden;
-`;
-
-const StyledImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 30px;
-`;
-
-const FormContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  border: ${(props) => (props.$isNew ? "2px solid black" : "none")};
-  border-radius: 10px;
-  position: relative;
-  transform: ${(props) => `rotate(${props.rotate}deg)`};
-  visibility: ${(props) => (props.$isEditing ? "hidden" : "visible")};
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  height: 100%;
-  border: none;
-  outline: none;
-  resize: none;
-  background: transparent;
-  font-size: 25px;
-`;
-
-const IconButton = styled.button`
-  position: absolute;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-`;
-
-const CloseButton = styled(IconButton)`
-  top: 5px;
-  right: 5px;
-`;
-
-const RotateButton = styled(IconButton)`
-  bottom: 5px;
-  left: 5px;
-`;
-
-const MoveButton = styled(IconButton)`
-  bottom: 5px;
-  right: 5px;
-`;
-
-const ActionButtonsContainer = styled.div`
-  position: absolute;
-  bottom: 0px;
-  margin-bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 20px;
-`;
-
-const SaveButton = styled(Button)`
-  font-size: 20px;
-  color: white;
-  width: 100px;
-`;
-
-const CancelButton = styled(Button)`
-  font-size: 20px;
-  color: white;
-  width: 100px;
-`;
-
-const Tooltip = styled.div`
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #202425;
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 12px;
-  visibility: ${(props) => (props.$show ? "visible" : "hidden")};
-`;
 
 const Review = () => {
   const [formVisible, setFormVisible] = useState(false);
@@ -119,7 +39,7 @@ const Review = () => {
   const [editingReview, setEditingReview] = useState(null);
 
   const user = useSelector((state) => state.user);
-  const navigate = useNavigate(); // Change to useNavigate
+  const navigate = useNavigate();
 
   const containerRef = useRef(null);
   const initialMousePos = useRef({ x: 0, y: 0 });
@@ -148,7 +68,7 @@ const Review = () => {
   const handleOpenForm = () => {
     if (!user || !user.id) {
       alert("로그인이 필요합니다.");
-      navigate("/login"); // Change to useNavigate
+      navigate("/login");
       return;
     }
     setFormVisible(true);
@@ -176,7 +96,7 @@ const Review = () => {
     textarea.value = formData.text;
     textarea.style.width = "auto";
     textarea.style.height = "auto";
-    const newWidth = textarea.scrollWidth + 20 + "px"; // 패딩과 여백 고려
+    const newWidth = textarea.scrollWidth + 20 + "px";
     const newHeight = textarea.scrollHeight + 20 + "px";
     document.body.removeChild(textarea);
 
@@ -192,7 +112,7 @@ const Review = () => {
       .post("/api/reviewSave", dataToSend)
       .then((response) => {
         setFormVisible(false);
-        alert("폼이 저장되었습니다.");
+        alert("작성완료!");
         setFormData({
           top: "0px",
           left: "0px",
@@ -289,8 +209,14 @@ const Review = () => {
     };
   }, [isRotating]);
 
+  useEffect(() => {
+    if (!user || !user.id) {
+      setFormVisible(false);
+    }
+  }, [user]);
+
   return (
-    <ImageContainer ref={containerRef}>
+    <CenterContainer ref={containerRef}>
       <StyledImage src={test1} alt="모코코" />
       {reviews.map((review) => (
         <Rnd
@@ -490,7 +416,7 @@ const Review = () => {
           </CancelButton>
         </ActionButtonsContainer>
       )}
-    </ImageContainer>
+    </CenterContainer>
   );
 };
 

@@ -2,7 +2,12 @@ import { LOGIN, LOGOUT, SET_ACTIVE_ICON } from "../actions/Actions";
 
 const initialState = {
   isAuthenticated: false,
-  user: null,
+  user: {
+    id: null,
+    nickName: null,
+    email: null,
+    tempYn: null,
+  },
   activeIcon: "home",
 };
 
@@ -16,13 +21,19 @@ const rootReducer = (state = initialState, action) => {
           id: action.payload.id,
           nickName: action.payload.nickName,
           email: action.payload.userEmail,
+          tempYn: action.payload.tempYn,
         },
       };
     case LOGOUT:
       return {
         ...state,
         isAuthenticated: false,
-        user: null,
+        user: {
+          id: null,
+          nickName: null,
+          email: null,
+          tempYn: null,
+        },
       };
     case SET_ACTIVE_ICON:
       return {

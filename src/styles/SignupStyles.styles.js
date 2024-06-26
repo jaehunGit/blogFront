@@ -20,16 +20,6 @@ export const SignupForm = styled.form`
   font-size: 12px;
 `;
 
-export const FormTitle = styled.div`
-  font-size: 40px;
-  font-family: nanumfontbold;
-  text-align: center;
-  margin-bottom: 50px;
-  color: #606b75;
-  border-bottom: 1px solid #ededed;
-  padding: 50px;
-`;
-
 export const StyledLabel = styled.label`
   margin-bottom: 5px;
   font-weight: bold;
