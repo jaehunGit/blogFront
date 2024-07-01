@@ -43,6 +43,7 @@ import {
   buttonStyles,
   loginButtonStyles,
 } from "./styles/MuiCustomStyles.Styles.js";
+import WeatherIcon from "./components/WeatherIcon.js";
 import EmailIcon from "@mui/icons-material/Email";
 import { Button } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
@@ -69,6 +70,7 @@ function App() {
   const dispatch = useDispatch();
   const activeIcon = useSelector((state) => state.activeIcon);
   const isAuthenticated = useSelector((state) => state.isAuthenticated);
+  const weather = useSelector((state) => state.weather);
   const user = useSelector((state) => state.user);
   const location = useLocation();
   const navigate = useNavigate();
@@ -156,6 +158,15 @@ function App() {
         <UserContainer>
           {isAuthenticated ? (
             <>
+              {weather?.location && weather?.weatherIconAdrs && (
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <span>{weather.location}</span>
+                  <WeatherIcon
+                    weatherIconAdrs={weather.weatherIconAdrs}
+                    weatherMain={weather.weatherMain}
+                  />
+                </div>
+              )}
               <span style={userInfoStyles}>{user.nickName}님</span>
               <Button
                 sx={buttonStyles}

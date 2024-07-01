@@ -1,14 +1,20 @@
-import { LOGIN, LOGOUT, SET_ACTIVE_ICON } from "../actions/Actions";
+// reducers/rootReducer.js
+import {
+  LOGIN,
+  LOGOUT,
+  SET_ACTIVE_ICON,
+  SET_WEATHER,
+} from "../actions/Actions";
 
 const initialState = {
   isAuthenticated: false,
-  user: {
-    id: null,
-    nickName: null,
-    email: null,
-    tempYn: null,
-  },
+  user: null,
   activeIcon: "home",
+  weather: {
+    location: "",
+    weatherMain: "",
+    weatherIconAdrs: "",
+  },
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -28,17 +34,21 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         isAuthenticated: false,
-        user: {
-          id: null,
-          nickName: null,
-          email: null,
-          tempYn: null,
-        },
+        user: null,
       };
     case SET_ACTIVE_ICON:
       return {
         ...state,
         activeIcon: action.payload,
+      };
+    case SET_WEATHER:
+      return {
+        ...state,
+        weather: {
+          location: action.payload.location,
+          weatherMain: action.payload.weatherMain,
+          weatherIconAdrs: action.payload.weatherIconAdrs,
+        },
       };
     default:
       return state;

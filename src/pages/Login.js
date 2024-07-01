@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../actions/Actions";
+import { login, setWeather } from "../actions/Actions";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CenterContainer } from "../styles/CommonStyles.js";
@@ -60,7 +60,6 @@ const Login = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          console.log("Latitude:", latitude, "Longitude:", longitude); // 좌표값 확인
           getAddressFromCoords(latitude, longitude);
         },
         (error) => {
@@ -78,20 +77,30 @@ const Login = () => {
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
       );
       const addressComponents = response.data.results[0].address_components;
-      const city = addressComponents.find((component) =>
-        component.types.includes("administrative_area_level_1")
-      )?.long_name;
-      const district =
-        addressComponents.find((component) =>
-          component.types.includes("administrative_area_level_2")
-        )?.long_name ||
-        addressComponents.find((component) =>
-          component.types.includes("sublocality")
-        )?.long_name;
-      console.log(`현재 위치: ${city} ${district}`);
+      const city = addressComponents[3]?.long_name;
+      const district = addressComponents[2]?.long_name;
+
+      const location = `${city} ${district}`;
+      getWeather(lat, lng, location);
     } catch (error) {
-      console.error(error);
+      console.error("Error getting address from coordinates:", error);
     }
+  };
+
+  const getWeather = (lat, lng, location) => {
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.REACT_APP_OPENWEATHERMAP_API_KEY}&units=metric`;
+    axios
+      .get(weatherUrl)
+      .then((res) => {
+        const weatherMain = res.data.weather[0].description;
+        const weatherIcon = res.data.weather[0].icon;
+        const weatherIconAdrs = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+
+        dispatch(setWeather(location, weatherMain, weatherIconAdrs));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleKeyPress = (e) => {

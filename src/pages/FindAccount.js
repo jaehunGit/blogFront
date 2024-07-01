@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   CenterContainer,
   FormTitle,
@@ -19,6 +20,13 @@ const FindAccount = () => {
   const [userId, setUserId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => state.isAuthenticated);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/home"); // 로그인된 상태라면 홈 페이지로 리디렉트
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleEmailForIdChange = (e) => setEmailForId(e.target.value);
   const handleEmailForPasswordChange = (e) =>
