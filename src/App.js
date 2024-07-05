@@ -17,6 +17,8 @@ import {
   AppContainer,
   Logo,
   UserContainer,
+  DropdownMenu,
+  DropdownItem,
 } from "./styles/AppStyles.styles.js";
 import { MainContainer } from "./styles/MainStyles.js";
 import {
@@ -56,6 +58,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 import Login from "./pages/Login.js";
 import FindAccount from "./pages/FindAccount.js";
+import Account from "./pages/Account.js";
 import emailjs from "emailjs-com";
 import { SERVICE_ID, TEMPLATE_ID, USER_ID } from "./email.js";
 import ChangePassword from "./pages/ChangePassword.js";
@@ -74,6 +77,7 @@ function App() {
   const user = useSelector((state) => state.user);
   const location = useLocation();
   const navigate = useNavigate();
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     const path = location.pathname.substring(1);
@@ -150,6 +154,14 @@ function App() {
     navigate("/home");
   };
 
+  const handleMouseEnter = () => {
+    setShowDropdown(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowDropdown(false);
+  };
+
   return (
     <>
       <GlobalStyles />
@@ -167,7 +179,20 @@ function App() {
                   />
                 </div>
               )}
-              <span style={userInfoStyles}>{user.nickName}님</span>
+              <span
+                style={userInfoStyles}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                {user.nickName}님
+                {showDropdown && (
+                  <DropdownMenu>
+                    <DropdownItem onClick={() => navigate("/account")}>
+                      프로필 설정
+                    </DropdownItem>
+                  </DropdownMenu>
+                )}
+              </span>
               <Button
                 sx={buttonStyles}
                 variant="text"
@@ -231,6 +256,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/FindAccount" element={<FindAccount />} />
             <Route path="/changePassword" element={<ChangePassword />} />
+            <Route path="/account" element={<Account />} />
           </Routes>
         </SubContainer2>
       </MainContainer>

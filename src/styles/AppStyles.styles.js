@@ -30,3 +30,21 @@ export const UserName = styled.span`
   font-weight: bold;
   font-size: 20px;
 `;
+
+export const DropdownMenu = styled.div`
+  position: absolute;
+  top: 80px;
+  right: 100px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 1000;
+`;
+export const DropdownItem = styled.div`
+  padding: 10px 20px;
+  cursor: pointer;
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;

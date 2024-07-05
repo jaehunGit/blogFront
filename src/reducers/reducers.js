@@ -3,6 +3,7 @@ import {
   LOGIN,
   LOGOUT,
   SET_ACTIVE_ICON,
+  UPDATE_NICKNAME,
   SET_WEATHER,
 } from "../actions/Actions";
 
@@ -40,6 +41,14 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         activeIcon: action.payload,
+      };
+    case UPDATE_NICKNAME:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          nickName: action.payload,
+        },
       };
     case SET_WEATHER:
       return {
