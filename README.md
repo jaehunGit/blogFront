@@ -1,4 +1,4 @@
-# React.js side project FrontEnd ( StyledComponents + geolocation api + openweathermap api )
+# React.js side project FrontEnd ( StyledComponents + geolocation api + openweathermap api + redux )
 
 **Summary : 회원가입 + 로그인 + 소개 + 방명록**
 
