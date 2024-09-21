@@ -3,7 +3,7 @@
 **Summary: 회원가입 + 로그인 + 소개 + 방명록**
 
 ## Project Demo
-![blog1](https://github.com/user-attachments/assets/720c27af-2443-492e-b168-a4bcbe7fc2ce)
+![test3](https://github.com/user-attachments/assets/0bc2a4f9-888b-485c-b4ee-028cd6e99a19)
 ![blog7](https://github.com/user-attachments/assets/1855370b-d6a2-4562-93b4-f0b28d3b4174)
 
 - ### 메인화면
